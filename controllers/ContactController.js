@@ -5,6 +5,13 @@ const getContacts = (req, res) => {
 
 //create contact
 const createContacts = (req, res) => {
+  console.log("contact craeted for ", req.body);
+  const { email, name, phoneNumber } = req.body;
+
+  if (!name || !email || !phoneNumber) {
+    res.status(400);
+    throw new Error("All fields are mandatory!");
+  }
   res.status(200).json({ message: "create contacts" });
 };
 
