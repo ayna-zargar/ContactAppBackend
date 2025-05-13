@@ -1,8 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const Contact = require("../models/contactModel");
+
 //get all contacts
+//private
 const getContacts = asyncHandler(async (req, res) => {
-  const contacts = await Contact.find();
+  const contacts = await Contact.find({ user_id: req.user.id });
   res.status(200).json(contacts);
 });
 
@@ -19,16 +21,22 @@ const createContacts = asyncHandler(async (req, res) => {
     name,
     email,
     phoneNumber,
+    user_id: req.user.id,
   });
-  res.status(200).json({ message: "created contact" });
+  res.status(200).json(contact);
 });
 
 //update contact
+//private
 const updateContacts = asyncHandler(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
   if (!contact) {
     res.status(404);
     throw new Error("Contact not found");
+  }
+  if (contact.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("User not authorized");
   }
   const updatedContact = await Contact.findByIdAndUpdate(
     req.params.id,
@@ -39,11 +47,16 @@ const updateContacts = asyncHandler(async (req, res) => {
 });
 
 //delete contact
+//private
 const deleteContacts = asyncHandler(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
   if (!contact) {
     res.status(404);
     throw new Error("Contact not found");
+  }
+  if (contact.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("User do not have permission to delete contact");
   }
   await Contact.findByIdAndDelete(req.params.id);
 
@@ -51,6 +64,7 @@ const deleteContacts = asyncHandler(async (req, res) => {
 });
 
 //get contact
+//private
 const getOneContact = asyncHandler(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
   if (!contact) {
