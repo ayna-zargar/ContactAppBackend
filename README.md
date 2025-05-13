@@ -1,4 +1,4 @@
-# ContactApp
+# ContactAppBackend
 
 A backend Node.js and Express-based Contact Management API with JWT authentication and MongoDB. This project allows users to register, log in, and manage their contacts securely with protected routes.
 
@@ -14,8 +14,8 @@ A backend Node.js and Express-based Contact Management API with JWT authenticati
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/ayna-zargar/ContactApp.git
-   cd ContactApp
+   git clone https://github.com/ayna-zargar/ContactAppBackend.git
+   cd ContactAppBackend
    ```
 
 2. **Install dependencies:**
